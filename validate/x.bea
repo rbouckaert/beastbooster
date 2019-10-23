@@ -1,0 +1,9 @@
+// hky4g-est-ucln-yule
+// to run on S12998.nex use:
+// runAppStore BeasyI -D file=S12998.nex -in x.bea -out S12998.xml
+template ../../beast2/templates/Standard.xml;
+import 'Import Alignment' $(file);
+use HKY;
+set gammaCategoryCount=4;
+use RelaxedClockLogNormal;
+

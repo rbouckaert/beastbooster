@@ -1,5 +1,8 @@
 package beast.evolution.operators;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +17,6 @@ import beast.core.util.Log;
 import beast.evolution.alignment.Alignment;
 import beast.evolution.alignment.distance.Distance;
 import beast.evolution.alignment.distance.JukesCantorDistance;
-import beast.evolution.operators.AttachOperator;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.TreeInterface;
 import mdsj.ClassicalScaling;
@@ -36,14 +38,16 @@ public class AlignmentDistanceProvider extends BEASTObject implements DistancePr
 
 		private final String ename;
 	}
-    public Input<TreeInterface> treeInput = new Input<TreeInterface>("tree", "phylogenetic beast.tree with sequence data in the leafs", Validate.REQUIRED);
-    public Input<Alignment> dataInput = new Input<Alignment>("data", "sequence data for the beast.tree", Validate.REQUIRED);
-    public Input<Distance> distanceInput = new Input<Distance>("distance", "method for calculating distance between two sequences (default Jukes Cantor)", new JukesCantorDistance());
+    public Input<TreeInterface> treeInput = new Input<>("tree", "phylogenetic beast.tree with sequence data in the leafs", Validate.REQUIRED);
+    public Input<Alignment> dataInput = new Input<>("data", "sequence data for the beast.tree", Validate.REQUIRED);
+    public Input<Distance> distanceInput = new Input<>("distance", "method for calculating distance between two sequences (default Jukes Cantor)", new JukesCantorDistance());
 
     
-	public Input<Method> distMethod = new Input<Method>("method", "for calculating distance between clade positions (for operator weights). sqrt takes " +
+	public Input<Method> distMethod = new Input<>("method", "for calculating distance between clade positions (for operator weights). sqrt takes " +
 	         "square root of distance (default distance)",  Method.DISTANCE, Method.values());
 
+    public Input<File> svgOuputInput = new Input<>("svg", "if specifies, mds map is written to file in svg with this file name");
+    public Input<Integer> dimensionInput = new Input<>("dimension", "number of dimensions to use for mds", 3);
 	
 	int DIM = 3;
 	
@@ -53,6 +57,7 @@ public class AlignmentDistanceProvider extends BEASTObject implements DistancePr
 
 	@Override
 	public void initAndValidate() {
+		DIM = dimensionInput.get();
 		distanceMethod = distMethod.get();
 		tree = treeInput.get();
 		
@@ -95,6 +100,50 @@ public class AlignmentDistanceProvider extends BEASTObject implements DistancePr
         	}
         }
 
+        if (svgOuputInput.get() != null) {
+			try {
+				double minx = 0, maxx = 0;
+				double miny = 0, maxy = 0;
+		        for (int i = 0; i < tree.getLeafNodeCount(); i++) {
+		        	minx = Math.min(minx, position[i][0]);
+		        	maxx = Math.max(maxx, position[i][0]);
+		        	miny = Math.min(miny, position[i][1]);
+		        	maxy = Math.max(maxy, position[i][1]);
+		        }
+		        
+	        	PrintStream svg;
+				svg = new PrintStream(svgOuputInput.get());
+				svg.println("<svg class=\"chart\" width=\"1240\" height=\"1040\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
+				svg.println("<g transform=\"translate(100,10)\">");
+				
+				// axes
+				svg.println("<rect x='1' y ='1' width=\"1018\" height=\"1018\" style=\"fill:none;stroke-width:1;stroke:rgb(0,0,0)\"/>");
+				
+				svg.println("<g transform=\"translate(10,10)\">");
+				// bars
+				double dx = 1000.0 ;
+				double dy = 1000.0 ;
+				// permissable area
+
+		        for (int i = 0; i < tree.getLeafNodeCount(); i++) {
+					int x = (int)((position[i][0] - minx) * 1000 / (maxx - minx));
+					int y = (int)((position[i][1] - miny) * 1000 / (maxy - miny));
+					// System.out.println("x=" + x + " y=" + y + " " + tree.getTaxonset().getTaxonId(i));
+					svg.println("<circle cx=\"" + x + "\" cy=\"" + y + "\" r=\"4\" style=\"stroke:blue;opacity:0.5;\" />");
+					svg.println("<text text-anchor=\"middle\" style=\"stroke:black;opacity:0.5;\" x='"+(x+5) + "' y='"+(y-5)+"'>" + tree.getTaxonset().getTaxonId(i) + "</text>");
+		        }
+				svg.println("</g>");
+				svg.println("</g>");
+				
+				svg.println("</svg>");
+	        	svg.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+        }
+        
+        
+        
 	}
 	
 	class LocationData implements DistanceProvider.Data {

@@ -158,7 +158,7 @@ public class AlignmentDistanceProvider extends BEASTObject implements DistancePr
 			weight = 1;
 		}
 		public LocationData() {
-			position = new double[3];
+			position = new double[DIM];
 	        weight = 0;
 		}
 	}
@@ -199,11 +199,11 @@ public class AlignmentDistanceProvider extends BEASTObject implements DistancePr
         assert d1.weight >= 0 &&  d2.weight > 0;
 
         if( d1.weight == 0 ) {
-            System.arraycopy(d2.position, 0, d1.position, 0, 3);
+            System.arraycopy(d2.position, 0, d1.position, 0, DIM);
             d1.weight = d2.weight;
         } else {
             final int w = d1.weight + d2.weight;
-            for (int i = 0; i < 3; ++i) {
+            for (int i = 0; i < DIM; ++i) {
                 d1.position[i] = (d1.position[i] * d1.weight + d2.position[i] * d2.weight) / w;
             }
             d1.weight = w;

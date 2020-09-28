@@ -1,12 +1,12 @@
-# treeops
+# BEAST Booster
 
-Tree Operators for [BEAST 2](http://beast2.org)
+BEAST booster for [BEAST 2](http://beast2.org)
 
 ## How to build
 
 * clone this repo, [BEASTLabs](https://github.com/BEAST2-Dev/BEASTLabs) and [BEAST 2](https://github.com/CompEvol/beast2/)
 * run `ant addon` from with the beast2 directory, then BEASTLabs, then treeops
-* install treeops package [by hand](http://www.beast2.org/managing-packages/#Install_by_hand)
+* install BEAST booster package [by hand](http://www.beast2.org/managing-packages/#Install_by_hand)
 
 ## How to use the operator
 

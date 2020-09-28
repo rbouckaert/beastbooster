@@ -14,6 +14,22 @@ public class TargetableUniform extends UniformOperator implements TargetableOper
 	private double lower, upper;
 	private int lowerIndex, upperIndex;
 
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+	    	throw new RuntimeException("use UniformOperator instead of " + this.getClass().getCanonicalName());
+		}
+	}
+	
 	@Override
 	public void initAndValidate() {
 		parameter = parameterInput.get();

@@ -77,7 +77,23 @@ public class TargetableEmpiricalNodeOperator extends TreeOperator implements Tar
     
     Tree tree;
     
-    @Override
+	int target;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			return proposal(tree.getLeafNodeCount() + Randomizer.nextInt(tree.getInternalNodeCount()));
+		}
+	}
+
+	@Override
 	public void initAndValidate() {
     	
     	tree = treeInput.get();
@@ -171,11 +187,6 @@ public class TargetableEmpiricalNodeOperator extends TreeOperator implements Tar
     }
     
 
-	@Override
-	public double proposal() {
-		return proposal(tree.getLeafNodeCount() + Randomizer.nextInt(tree.getInternalNodeCount()));
-	}
-	
 	
 //	int k = 0;
 	

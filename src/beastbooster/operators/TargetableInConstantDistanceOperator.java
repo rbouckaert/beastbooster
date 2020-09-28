@@ -7,7 +7,22 @@ import consoperators.InConstantDistanceOperator;
 
 @Description("Targetable version of Constant Distance Operator")
 public class TargetableInConstantDistanceOperator extends InConstantDistanceOperator implements TargetableOperator {
-	int target;
+	
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use InConstantDistanceOperator");
+		}
+	}
 	
 	@Override
 	public double proposal(int target) {

@@ -27,6 +27,22 @@ public class TargetableMALANodeOperator extends TreeOperator implements Targetab
 	private double windowSize, upper, lower;
 	private Tree tree;
 
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use TargetableOperatorSchedule");
+		}
+	}
+	
 	@Override
 	public void initAndValidate() {
 		tree = treeInput.get();
@@ -194,11 +210,6 @@ public class TargetableMALANodeOperator extends TreeOperator implements Targetab
     public boolean canHandleRootTargets() {
     	return true;
     }
-
-	@Override
-	public double proposal() {
-		throw new RuntimeException("This operator should only be used in ");
-	}
 	
 	@Override
 	public boolean requiresStateInitialisation() {

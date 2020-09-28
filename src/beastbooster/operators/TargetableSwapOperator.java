@@ -16,17 +16,29 @@ public class TargetableSwapOperator extends Operator implements TargetableOperat
     final public Input<RealParameter> parameterInput = new Input<>("parameter", "a real parameter to swap individual values for");
     
 
-    Parameter<?> parameter;
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+	    	throw new RuntimeException("use SwapOperator instead of " + this.getClass().getCanonicalName());
+		}
+	}
+	
+	Parameter<?> parameter;
 
     @Override
     public void initAndValidate() {
     	parameter = parameterInput.get();
     }
 
-    @Override
-    public double proposal() {
-    	throw new RuntimeException("use SwapOperator instead of " + this.getClass().getCanonicalName());
-    }
 
 
     @Override

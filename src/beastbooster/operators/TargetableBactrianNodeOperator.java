@@ -9,6 +9,22 @@ import beast.evolution.tree.Tree;
 @Description("Node operator that proposes node heights in traversal order")
 public class TargetableBactrianNodeOperator extends BactrianNodeOperator implements TargetableOperator {
 	
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use BactrianNodeOperator insetad");
+		}
+	}
+	
 	@Override
 	public void initAndValidate() {
 		super.initAndValidate();

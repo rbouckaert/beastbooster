@@ -6,6 +6,21 @@ import beast.util.Randomizer;
 
 public class TargetableRealRandomWalkOperator extends RealRandomWalkOperator implements TargetableOperator {
 
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use RealRandomWalkOperator");
+		}
+	}
 	
     /**
      * override this for proposals,

@@ -10,7 +10,23 @@ import beast.util.Randomizer;
 
 public class TargetableSubTreeSlide extends SubtreeSlide implements TargetableOperator {
 
-	 /**
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use SubtreeSlide");
+		}
+	}
+	
+	/**
      * Do a probabilistic subtree slide move.
      *
      * @return log of Hastings Ratio, or Double.NEGATIVE_INFINITY if proposal should not be accepted *

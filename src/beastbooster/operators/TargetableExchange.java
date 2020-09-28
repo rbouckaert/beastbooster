@@ -19,6 +19,22 @@ import beastbooster.likelihood.Targetable;
 public class TargetableExchange extends TreeOperator implements TargetableOperator {
 
 
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use Exchange instead");
+		}
+	}
+	
 	@Override
 	public void initAndValidate() {
 		
@@ -103,11 +119,6 @@ public class TargetableExchange extends TreeOperator implements TargetableOperat
 		return false;
 	}
 
-	@Override
-	public double proposal() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public String getName() {

@@ -5,6 +5,23 @@ import beast.evolution.operators.BactrianScaleOperator;
 
 public class TargetableBactrianScaleOperator extends BactrianScaleOperator implements TargetableOperator {
 
+	private int target = -1;
+	
+	@Override
+	public void setTarget(int target) {
+		this.target = target;
+	}
+	
+	@Override
+	public double proposal() {
+		if (target >= 0) {
+			return proposal(target);
+		} else {
+			throw new RuntimeException("Target is not set, use BactrianScaleOperator");
+		}
+	}
+
+
 	@Override
 	public double proposal(int index) {
 		final RealParameter param = parameterInput.get(this);

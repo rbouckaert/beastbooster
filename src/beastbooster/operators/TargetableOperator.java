@@ -1,8 +1,12 @@
 package beastbooster.operators;
 
-import beast.core.BEASTInterface;
+import beast.core.Description;
 
+@Description("Operator that can be set up to target a particular node in tree/dimension in parameter")
 public interface TargetableOperator {
+
+	/** sets target dimension **/
+	abstract public void setTarget(int target);
 
 	/** 
 	 * Propose new state for target node or dimension
@@ -21,6 +25,11 @@ public interface TargetableOperator {
 	};
 	
 	default public boolean canHandleInternlTargets() {
+		return true;
+	}
+	
+	/** override for meta-operators that are not always Targetable **/
+	default boolean isTargetable() {
 		return true;
 	}
 }

@@ -77,7 +77,7 @@ public class TargetableEmpiricalNodeOperator extends TreeOperator implements Tar
     
     Tree tree;
     
-	int target;
+	private int target = -1;
 	
 	@Override
 	public void setTarget(int target) {

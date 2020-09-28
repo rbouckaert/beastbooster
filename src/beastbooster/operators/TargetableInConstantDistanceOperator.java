@@ -27,7 +27,7 @@ public class TargetableInConstantDistanceOperator extends InConstantDistanceOper
 	@Override
 	public double proposal(int target) {
 		this.target = target;
-		return proposal();
+		return super.proposal();
 	}
 	
 	@Override

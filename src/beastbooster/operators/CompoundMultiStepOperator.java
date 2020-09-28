@@ -158,7 +158,7 @@ public class CompoundMultiStepOperator extends Operator implements MultiStepOper
 			final int operatorIndex = Randomizer.randomChoice(cumulativeProbs);
 			lastOperator = operators.get(operatorIndex);
 
-			if ((node.isLeaf() && lastOperator.canHandleInternlTargets()) ||
+			if ((node.isLeaf() && lastOperator.canHandleLeafTargets()) ||
 				(node.isRoot() && lastOperator.canHandleRootTargets()) ||
 				(!node.isLeaf() &&  !node.isRoot() && lastOperator.canHandleInternlTargets())) {
 				return lastOperator.proposal(target);

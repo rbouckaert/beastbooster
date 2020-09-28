@@ -39,7 +39,7 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 	// NNI may be rejected for leaf nodes, so give up if such
     // operators are chosen after MAX_ATTEMPTS times these are
     // selected
-	// private final static int MAX_ATTEMPTS = 10;
+	private final static int MAX_ATTEMPTS = 5;
 
 	@Override
 	public void initAndValidate() {
@@ -120,51 +120,65 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 		}		
 	}
     
-    private int currentStep;
-	
+    private int currentStep;	
 
     
     @Override
 	public Operator selectOperator() {
 
+    	
         while (true) {
     		Operator operator = super.selectOperator();
     		
         	if (operator instanceof TargetableOperator && ((TargetableOperator) operator).isTargetable()) {
         		TargetableOperator targetableOperator = (TargetableOperator) operator;
+        		int attemptTargetable = 0;
 
-				if (currentStep == stepCount()) {
-					target = order[order.length - 1];
-					// set DuckTreeLikelihood targets, if target is not a leaf
-					if (!tree.getNode(target).isLeaf()) {
+        		while (true) {
+					if (currentStep == stepCount()) {
+						target = order[order.length - 1];
+						// set DuckTreeLikelihood targets, if target is not a leaf
+						if (!tree.getNode(target).isLeaf()) {
+							for (Targetable t : targets) {
+								t.setTarget(target);
+							}
+						}
+						((TargetableOperator) operator).setTarget(target);
+						currentStep = 0;
+						return operator;
+					}
+					if (currentStep == 0) {
+						// first step, determine current post-order
+						traverse(tree.getRoot(), new int[1]);
+					}
+	
+					// set target nodes in Targetables (only if target node changes)
+					if (currentStep % proposalsPerNode == 0) {
+						target = order[currentStep / proposalsPerNode];
 						for (Targetable t : targets) {
 							t.setTarget(target);
 						}
 					}
 					((TargetableOperator) operator).setTarget(target);
-					currentStep = 0;
-					return operator;
-				}
-				if (currentStep == 0) {
-					// first step, determine current post-order
-					traverse(tree.getRoot(), new int[1]);
-				}
-
-				// set target nodes in Targetables (only if target node changes)
-				if (currentStep % proposalsPerNode == 0) {
-					target = order[currentStep / proposalsPerNode];
-					for (Targetable t : targets) {
-						t.setTarget(target);
+	                Node node = tree.getNode(target);
+					if ((node.isLeaf() && targetableOperator.canHandleLeafTargets()) ||
+						(node.isRoot() && targetableOperator.canHandleRootTargets()) ||
+						(!node.isLeaf() && !node.isRoot() && targetableOperator.canHandleInternlTargets())) {
+						currentStep++;
+						return operator;
 					}
-				}
-				((TargetableOperator) operator).setTarget(target);
-                Node node = tree.getNode(target);
-				if ((node.isLeaf() && targetableOperator.canHandleLeafTargets()) ||
-					(node.isRoot() && targetableOperator.canHandleRootTargets()) ||
-					(!node.isLeaf() && !node.isRoot() && targetableOperator.canHandleInternlTargets())) {
-					currentStep++;
-					return operator;
-				}
+					attemptTargetable++;
+					if (attemptTargetable >= MAX_ATTEMPTS) {
+						currentStep++;
+						if (currentStep >= stepCount()) {
+							currentStep = 0;
+						}
+						attemptTargetable = 0;
+					}
+					do {
+						operator = super.selectOperator();
+					} while (!(operator instanceof TargetableOperator));
+	        	}
 			} else {
 				return operator;
 			}

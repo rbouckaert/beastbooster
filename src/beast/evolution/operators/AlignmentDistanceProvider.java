@@ -21,7 +21,7 @@ import beast.evolution.tree.Node;
 import beast.evolution.tree.TreeInterface;
 import mdsj.ClassicalScaling;
 
-@Description("Provide distance between sequnces in allignment after multi-dimensional scaling -- to be used by AttachOperator")
+@Description("Provide distance between sequences in allignment after multi-dimensional scaling -- to be used by AttachOperator")
 public class AlignmentDistanceProvider extends BEASTObject implements DistanceProvider {
 	enum Method {
 		DISTANCE("distance"),

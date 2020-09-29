@@ -155,8 +155,10 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 					// set target nodes in Targetables (only if target node changes)
 					if (currentStep % proposalsPerNode == 0) {
 						target = order[currentStep / proposalsPerNode];
-						for (Targetable t : targets) {
-							t.setTarget(target);
+						if (!tree.getNode(target).isLeaf()) {
+							for (Targetable t : targets) {
+								t.setTarget(target);
+							}
 						}
 					}
 					((TargetableOperator) operator).setTarget(target);

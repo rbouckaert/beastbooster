@@ -5,6 +5,8 @@ package beastbooster.operators;
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Operator;
+import beast.core.Input.Validate;
+import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.Parameter;
 import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
@@ -14,7 +16,8 @@ import beast.util.Randomizer;
 @Description("A generic operator swapping a one or more pairs in a multi-dimensional parameter")
 public class TargetableSwapOperator extends Operator implements TargetableOperator {
     final public Input<RealParameter> parameterInput = new Input<>("parameter", "a real parameter to swap individual values for");
-    
+    final public Input<IntegerParameter> intparameterInput = new Input<>("intparameter", "an integer parameter to swap individual values for", Validate.XOR, parameterInput);
+
 
 	private int target = -1;
 	
@@ -36,7 +39,11 @@ public class TargetableSwapOperator extends Operator implements TargetableOperat
 
     @Override
     public void initAndValidate() {
-    	parameter = parameterInput.get();
+        if (parameterInput.get() != null) {
+            parameter = parameterInput.get();
+        } else {
+            parameter = intparameterInput.get();
+        }
     }
 
 

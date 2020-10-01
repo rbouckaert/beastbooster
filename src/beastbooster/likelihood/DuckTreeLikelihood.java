@@ -58,7 +58,9 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
         String javaProperty = System.getProperty("java.only");
     	System.setProperty("java.only", "true");
     	super.initAndValidate();
-    	System.setProperty("java.only", javaProperty);
+    	if (javaProperty != null) {
+    		System.setProperty("java.only", javaProperty);
+    	}
     }
     
 	@Override

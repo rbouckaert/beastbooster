@@ -103,14 +103,90 @@ public class DuckLikelihoodCore extends BeerLikelihoodCore {
 		}
 	}
 
-	private void calculateStatesStatesStatesPruning(int[] is, double[] ds, int[] is2, double[] ds2, int[] is3,
-			double[] ds3, double[] ds4) {
-		// should never get here for binary tree
-		throw new RuntimeException("Not implemented yet");
+	protected void calculateStatesStatesStatesPruning(
+			int[] stateIndex1, double[] matrices1,
+            int[] stateIndex2, double[] matrices2,
+			int[] stateIndex3, double[] matrices3, 
+			double[] partials4) {
+		   // should never get here for binary tree?
+		
+	       int v = 0;
 
+	        for (int l = 0; l < nrOfMatrices; l++) {
+
+	            for (int k = 0; k < nrOfPatterns; k++) {
+
+	                int state1 = stateIndex1[k];
+	                int state2 = stateIndex2[k];
+	                int state3 = stateIndex3[k];
+
+	                int w = l * matrixSize;
+
+	                if (state1 < nrOfStates) {
+	                	if (state2 < nrOfStates) {
+		                	if (state3 < nrOfStates) {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices1[w + state1] * matrices2[w + state2] * matrices3[w + state3];
+			                        v++;
+			                        w += nrOfStates;
+			                    }
+		                	} else {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices1[w + state1] * matrices2[w + state2];
+			                        v++;
+			                        w += nrOfStates;
+			                    }
+		                	}
+	                	} else {
+	                		if (state3 < nrOfStates) {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices1[w + state1] * matrices3[w + state3];
+			                        v++;
+			                        w += nrOfStates;
+			                    }
+	                		} else {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices1[w + state1];
+			                        v++;
+			                        w += nrOfStates;
+			                    }
+	                		}
+	                	}
+	                } else {
+	                	if (state2 < nrOfStates) {
+		                	if (state3 < nrOfStates) {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices2[w + state2] * matrices3[w + state3];
+			                        v++;
+			                        w += nrOfStates;
+			                    }
+		                	} else {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices2[w + state2];
+			                        v++;
+			                        w += nrOfStates;
+			                    }		                		
+		                	}
+	                	} else {
+	                		if (state3 < nrOfStates) {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = matrices3[w + state3];
+			                        v++;
+			                        w += nrOfStates;
+			                    }
+	                		} else {
+			                    for (int i = 0; i < nrOfStates; i++) {
+			                        partials4[v] = 1.0;
+			                        v++;
+			                    }
+	                		}
+	                	}
+	                }
+	            }
+	        }
 	}
 
-	private void calculateStatesStatesPartialsPruning(
+	protected void calculateStatesStatesPartialsPruning(
 			  int[] stateIndex1, double[] matrices1,
               int[] stateIndex2, double[] matrices2,
 			  double[] partials3, double[] matrices3, 
@@ -263,7 +339,7 @@ public class DuckLikelihoodCore extends BeerLikelihoodCore {
 	
 	
 	
-	private void calculatePartialsPartialsPartialsPruning(
+	protected void calculatePartialsPartialsPartialsPruning(
 			double[] partials1, double[] matrices1, 
 			double[] partials2, double[] matrices2, 
 			double[] partials3, double[] matrices3, 

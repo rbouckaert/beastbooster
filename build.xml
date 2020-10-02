@@ -15,6 +15,7 @@
 	<property name="distBEASTBooster" location="${buildBEASTBooster}/dist" />
 	<property name="BEASTLabsclasspath" location="../BEASTLabs/build" />
 	<property name="ConstDistanceclasspath" location="../ConstantDistanceOperator/build" />
+	<property name="ORCclasspath" location="../ORC/build" />
 	<property name="beast2path" location="../beast2" />
 	<property name="libBeast2" location="${beast2path}/lib" />
 	<property name="srcBeast2" location="${beast2path}/src" />
@@ -40,6 +41,7 @@
         <pathelement path="${beast2classpath}"/>
         <pathelement path="${BEASTLabsclasspath}"/>
 		<pathelement path="${ConstDistanceclasspath}"/>
+		<pathelement path="${ORCclasspath}"/>
 	</path>
 
 	<!-- start -->

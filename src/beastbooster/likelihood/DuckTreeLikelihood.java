@@ -2,6 +2,9 @@ package beastbooster.likelihood;
 
 import beast.core.Description;
 import beast.evolution.datatype.DataType;
+import beast.evolution.likelihood.BeerLikelihoodCore;
+import beast.evolution.likelihood.BeerLikelihoodCore4;
+import beast.evolution.likelihood.LikelihoodCore;
 import beast.evolution.likelihood.TreeLikelihood;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
@@ -65,6 +68,16 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
     	}
     }
     
+    
+	@Override
+    protected LikelihoodCore createLikelihoodCore(int stateCount) {
+		if (stateCount == 4) {
+			return new DuckLikelihoodCore4(stateCount);
+		} else {
+			return new DuckLikelihoodCore(stateCount);
+		}
+    }
+
 	@Override
 	protected int traverse(Node node) {
 		TreeInterface tree = treeInput.get();
@@ -184,6 +197,22 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
         	}
 
             // If either child node was updated then update this node too
+        	if (origin == null && (update1 != Tree.IS_CLEAN || update2 != Tree.IS_CLEAN || updateTarget)) {
+            	int rootIndex = treeInput.get().getRoot().getNr();
+                likelihoodCore.setNodePartialsForUpdate(rootIndex);
+                if (update >= Tree.IS_FILTHY) {
+                    likelihoodCore.setNodeStatesForUpdate(rootIndex);
+                }
+
+                if (m_siteModel.integrateAcrossCategories()) {
+                    ((DuckLikelihoodCore) likelihoodCore).calculatePartials(neighbour1.getNr(), neighbour2.getNr(), neighbour3.getNr(), rootIndex);
+                } else {
+                    throw new RuntimeException("Error TreeLikelihood 201: Site categories not supported");
+                    //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
+                }
+                update |= Tree.IS_DIRTY;
+        		
+        	} else 
             if (update1 != Tree.IS_CLEAN || update2 != Tree.IS_CLEAN || updateTarget) {
 
                 likelihoodCore.setNodePartialsForUpdate(nodeIndex);
@@ -198,8 +227,7 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
                     //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
                 }
                 update |= Tree.IS_DIRTY;
-            }
-
+            } else 
             if (origin == null) { // update3 != Tree.IS_CLEAN) {
             	int rootIndex = treeInput.get().getRoot().getNr();
                 likelihoodCore.setNodePartialsForUpdate(rootIndex);

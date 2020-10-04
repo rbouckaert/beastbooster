@@ -196,8 +196,9 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
         		throw new RuntimeException("Programmer error: should not get at " + this.getClass().getSimpleName() + ".traverse()");
         	}
 
+        	if (true) {
             // If either child node was updated then update this node too
-        	if (origin == null && (update1 != Tree.IS_CLEAN || update2 != Tree.IS_CLEAN || updateTarget)) {
+        	if (origin == null) { // && (update1 != Tree.IS_CLEAN || update2 != Tree.IS_CLEAN || updateTarget)) {
             	int rootIndex = treeInput.get().getRoot().getNr();
                 likelihoodCore.setNodePartialsForUpdate(rootIndex);
                 if (update >= Tree.IS_FILTHY) {
@@ -227,21 +228,39 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
                     //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
                 }
                 update |= Tree.IS_DIRTY;
-            } else 
-            if (origin == null) { // update3 != Tree.IS_CLEAN) {
-            	int rootIndex = treeInput.get().getRoot().getNr();
-                likelihoodCore.setNodePartialsForUpdate(rootIndex);
-                if (update >= Tree.IS_FILTHY) {
-                    likelihoodCore.setNodeStatesForUpdate(rootIndex);
-                }
+            }
+        	} else {
+                if (update1 != Tree.IS_CLEAN || update2 != Tree.IS_CLEAN || updateTarget) {
 
-                if (m_siteModel.integrateAcrossCategories()) {
-                    likelihoodCore.calculatePartials(nodeIndex, neighbour3.getNr(), rootIndex);
-                } else {
-                    throw new RuntimeException("Error TreeLikelihood 201: Site categories not supported");
-                    //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
-                }
-                update |= Tree.IS_DIRTY;
+                    likelihoodCore.setNodePartialsForUpdate(nodeIndex);
+                    if (update >= Tree.IS_FILTHY) {
+                        likelihoodCore.setNodeStatesForUpdate(nodeIndex);
+                    }
+
+                    if (m_siteModel.integrateAcrossCategories()) {
+                        likelihoodCore.calculatePartials(neighbour1.getNr(), neighbour2.getNr(), nodeIndex);
+                    } else {
+                        throw new RuntimeException("Error TreeLikelihood 201: Site categories not supported");
+                        //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
+                    }
+                    update |= Tree.IS_DIRTY;
+                }            	
+
+	            if (origin == null) { // update3 != Tree.IS_CLEAN) {
+	            	int rootIndex = treeInput.get().getRoot().getNr();
+	                likelihoodCore.setNodePartialsForUpdate(rootIndex);
+	                if (update >= Tree.IS_FILTHY) {
+	                    likelihoodCore.setNodeStatesForUpdate(rootIndex);
+	                }
+	
+	                if (m_siteModel.integrateAcrossCategories()) {
+	                    likelihoodCore.calculatePartials(nodeIndex, neighbour3.getNr(), rootIndex);
+	                } else {
+	                    throw new RuntimeException("Error TreeLikelihood 201: Site categories not supported");
+	                    //m_pLikelihoodCore->calculatePartials(childNum1, childNum2, nodeNum, siteCategories);
+	                }
+	                update |= Tree.IS_DIRTY;
+	            }
             }
             
             if (origin == null) {

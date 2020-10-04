@@ -149,7 +149,7 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
         	Node neighbour1, neighbour2, neighbour3 = null;
         	int update1 = Tree.IS_CLEAN;
         	int update2 = Tree.IS_CLEAN;
-        	int update3 = Tree.IS_CLEAN;
+        	//int update3 = Tree.IS_CLEAN;
         	if (node.getParent() == origin || (node.getParent().isRoot() && origin != null && origin.getParent().isRoot())) {
         		// going down
         		neighbour1 = node.getLeft(); //Two children
@@ -191,12 +191,12 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
         		if (neighbour3.isRoot()) {
         			neighbour3 = neighbour3.getLeft() == node ? neighbour3.getRight() : neighbour3.getLeft();
         		}
-        		update3 = traverseToTarget(neighbour3, node);
+        		/*update3 =*/ traverseToTarget(neighbour3, node);
         	} else {
         		throw new RuntimeException("Programmer error: should not get at " + this.getClass().getSimpleName() + ".traverse()");
         	}
 
-        	if (true) {
+        	if (false) {
             // If either child node was updated then update this node too
         	if (origin == null) { // && (update1 != Tree.IS_CLEAN || update2 != Tree.IS_CLEAN || updateTarget)) {
             	int rootIndex = treeInput.get().getRoot().getNr();
@@ -265,6 +265,7 @@ public class DuckTreeLikelihood extends TreeLikelihood  implements Targetable {
             
             if (origin == null) {
             	int rootIndex = treeInput.get().getRoot().getNr();
+
                 // No parent this is the root of the beast.tree -
                 // calculate the pattern likelihoods
                 final double[] frequencies = //m_pFreqs.get().

@@ -41,6 +41,9 @@ public class TargetableBactrianNodeOperator extends BactrianNodeOperator impleme
             return Double.NEGATIVE_INFINITY;
         
         Node node = tree.getNode(target);
+        if (node.isLeaf() || node.isRoot())
+            return Double.NEGATIVE_INFINITY;
+        
         double upper = node.getParent().getHeight();
         double lower = Math.max(node.getLeft().getHeight(), node.getRight().getHeight());
         

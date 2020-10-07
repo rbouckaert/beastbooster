@@ -75,7 +75,9 @@ public class TargetableExchange extends TreeOperator implements TargetableOperat
 		}
 
 		Node grandParent = tree.getNode(target);
-		
+        if (grandParent.isLeaf())
+            return Double.NEGATIVE_INFINITY;
+
 		Node parentIndex = grandParent.getLeft();
 		Node uncle = grandParent.getRight();
 		if (parentIndex.getHeight() < uncle.getHeight()) {

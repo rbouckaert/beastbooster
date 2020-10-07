@@ -39,7 +39,7 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 	// NNI may be rejected for leaf nodes, so give up if such
     // operators are chosen after MAX_ATTEMPTS times these are
     // selected
-	private final static int MAX_ATTEMPTS = 5;
+	private final static int MAX_ATTEMPTS = 10;
 
 	@Override
 	public void initAndValidate() {

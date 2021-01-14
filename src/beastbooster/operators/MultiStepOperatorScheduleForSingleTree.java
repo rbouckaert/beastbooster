@@ -1,14 +1,21 @@
 package beastbooster.operators;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import beast.core.Description;
 import beast.core.Input;
 import beast.core.Operator;
 import beast.core.OperatorSchedule;
+import beast.core.util.Log;
+import beast.evolution.operators.Exchange;
+import beast.evolution.operators.SubtreeSlide;
 import beast.evolution.operators.TreeOperator;
+import beast.evolution.operators.Uniform;
 import beast.evolution.tree.Node;
 import beast.evolution.tree.Tree;
 import beast.util.Randomizer;
@@ -56,12 +63,45 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 
 	}
     
+
 	@Override
 	public void addOperator(Operator p) {
+		if (p.getClass() == Uniform.class) {
+			Operator bp = new beastbooster.operators.TargetableBactrianNodeOperator();
+			p = initialiseOperator(p, bp);
+		} else if (p.getClass() == SubtreeSlide.class) {
+			Operator bp = new beastbooster.operators.TargetableSubTreeSlide();
+			p = initialiseOperator(p, bp);
+		} else if (p.getClass() == Exchange.class && ((Exchange)p).isNarrowInput.get()) {
+			Operator bp = new beastbooster.operators.TargetableExchange();
+			p = initialiseOperator(p, bp);
+		}
 		super.addOperator(p);
 		processOperators();
 	}
-    
+	
+	private Operator initialiseOperator(Operator p, Operator bp) {
+		Log.warning("replacing " + p.getID() + " with " + bp.getClass().getSimpleName());
+
+		List<Object> os = new ArrayList<>();
+		Set<String> inputNames = new LinkedHashSet<>();
+		for (Input<?> input : p.listInputs()) {
+			inputNames.add(input.getName());
+		}
+		
+		for (Input<?> input : bp.listInputs()) {
+			if (inputNames.contains(input.getName())) {
+				Object value = p.getInputValue(input.getName());
+				if (value != null && !(value instanceof List && ((List<?>)value).size() == 0)) {
+				    os.add(input.getName());
+				    os.add(value);
+				}	
+			}
+		}
+		bp.initByName(os.toArray());
+		bp.setID(p.getID());
+		return bp;
+	}
 	@Override
 	protected void addOperators(Collection<Operator> ops) {
 		super.addOperators(ops);
@@ -94,6 +134,8 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 		
 		currentStep = 0;
 	}
+	
+	
 
 	/** establish post-order traversal on internal nodes **/
 	private void traverse(Node node, int[] is) {

@@ -7,8 +7,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import beast.core.BEASTInterface;
 import beast.core.Description;
 import beast.core.Input;
+import beast.core.MCMC;
 import beast.core.Operator;
 import beast.core.OperatorSchedule;
 import beast.core.util.Log;
@@ -25,7 +27,8 @@ import beastbooster.likelihood.Targetable;
 		+ "number of steps consecutively")
 public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 	final public Input<Integer> proposalsPerNodeInput = new Input<>("proposalsPerNode", "number of proposals done for a node before moving on to the next node", 3);
-	final public Input<List<Targetable>> targetsInput = new Input<>("target", "likelihoods affected by the node proposal", new ArrayList<>());
+	final public Input<List<Targetable>> targetsInput = new Input<>("target", "likelihoods affected by the node proposal. "
+			+ "If not specified, traverse the model graph in search of targetable objects.", new ArrayList<>());
 	// public Input<List<TargetableOperator>> operatorInput = new Input<>("operator", "operator the CompoundOperator chooses from with probability proportional to its weight", new ArrayList<>(), Validate.REQUIRED);
 	final public Input<Boolean> fullTraverseInput = new Input<>("fullTraverse", "whether to visit every node once (false), or on every node visit (true)" , true);
 	final public Input<Boolean> includeLeafsInput = new Input<>("includeLeafs", "whether to visit leaf nodes (true) or nor (false)" , false);
@@ -57,12 +60,40 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 		
 		proposalsPerNode = proposalsPerNodeInput.get();
 		targets = targetsInput.get();
-		operators = operatorsInput.get();
+		if (targets.size() == 0) {
+			discoverTargets(this);
+		}
+		operators = new ArrayList<>();// operatorsInput.get();
 		
 		processOperators();
+		for (Operator p : operatorsInput.get()) {
+			addOperator(p);
+		}
 
 	}
     
+	private void discoverTargets(BEASTInterface o2) {
+		for (BEASTInterface o : o2.getOutputs()) {
+			if (o instanceof MCMC) {
+				discoverTargetsDown(o);
+			} else {
+				discoverTargets(o);
+			}
+		}
+	}
+
+	private void discoverTargetsDown(BEASTInterface o) {
+		for (BEASTInterface o2 : o.listActiveBEASTObjects()) {
+			if (o2 instanceof Targetable) {
+				if (!targets.contains((Targetable) o2)) {
+					targets.add((Targetable) o2);
+				}
+			} else {
+				discoverTargetsDown(o2);
+			}
+		}
+	}
+
 
 	@Override
 	public void addOperator(Operator p) {
@@ -102,6 +133,7 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 		bp.setID(p.getID());
 		return bp;
 	}
+	
 	@Override
 	protected void addOperators(Collection<Operator> ops) {
 		super.addOperators(ops);

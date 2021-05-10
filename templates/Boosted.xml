@@ -4,17 +4,19 @@
 
     <mergewith point='substModelTemplates'>
 		
-        <subtemplate id='DefaultOperatorSchedule' class='beast.core.OperatorSchedule' mainid='OperatorSchedule'>
+        <subtemplate id='MultiStepOperatorSchedule' class='beast.core.OperatorSchedule' mainid='MultiStepOperatorScheduleForSingleTree'>
 <![CDATA[
-		    <operatorschedule id="MultiStepOperatorSchedule" spec="beastbooster.operators.MultiStepOperatorScheduleForSingleTree"
+		    <operatorschedule id="MultiStepOperatorScheduleForSingleTree" spec="beastbooster.operators.MultiStepOperatorScheduleForSingleTree"
     	    proposalsPerNode="1"
         	includeLeafs="false"
-	        fullTraverse="true">
-    	            <target idref="treeLikelihood.wc"/>
+		fullTraverse="true">
+		<!--
+		<target idref="treeLikelihood.$(n)"/>
+		-->
 	    	</operatorschedule>
 ]]>	    	
-            <connect srcID='treeLikelihood.$(n)' targetID='MultiStepOperatorSchedule' inputName='target'
-                     if='inlikelihood(target.$(n))'/>
+            <connect srcID='treeLikelihood.$(n)' targetID='MultiStepOperatorScheduleForSingleTree' inputName='potentialTarget'
+                     if='inlikelihood(treeLikelihood.$(n))'/>
 
         </subtemplate>
 

@@ -1,7 +1,6 @@
 package beastbooster.likelihood;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import beast.core.Input;
@@ -51,7 +50,7 @@ public class TreeLikelihoodF extends TreeLikelihood {
         // First update the transition probability matrix(ices) for this branch
         //if (!node.isRoot() && (update != Tree.IS_CLEAN || branchTime != m_StoredBranchLengths[nodeIndex])) {
         
-        if (!node.isRoot() && (update != Tree.IS_CLEAN || Math.abs(branchTime - m_branchLengths[nodeIndex]) > tolerance)) {
+        if (!node.isRoot() && (update != Tree.IS_CLEAN || Math.abs(branchTime - m_branchLengths[nodeIndex]) > 0)) {
             m_branchLengths[nodeIndex] = branchTime;
             final Node parent = node.getParent();
             likelihoodCore.setNodeMatrixForUpdate(nodeIndex);
@@ -157,6 +156,15 @@ public class TreeLikelihoodF extends TreeLikelihood {
                     w++;
                 }
             }
+        }
+        
+        if (getConstantPattern() != null) { 
+        	double proportionInvariant = m_siteModel.getProportionInvariant();
+        	// some portion of sites is invariant, so adjust root partials for this
+        	int offset = freqArray.length - nrOfStates;
+        	for (final int i : getConstantPattern()) {
+        		outPartials[i] += proportionInvariant * freqArray[offset + i % nrOfStates];
+        	}
         }
         
         v = 0;

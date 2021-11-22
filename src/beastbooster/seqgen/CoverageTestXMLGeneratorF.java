@@ -38,7 +38,8 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 			"number of site to be generted in alignment", 1000);
 	final public Input<Boolean> useGammaInput = new Input<>("useGamma", "use gamma rate heterogeneity", true);
 	final public Input<Boolean> useClockInput = new Input<>("useClock", "use strict clock rate from file (defaults to 1)", true);
-
+	final public Input<Boolean> usePropInvarInput = new Input<>("usePropInvar", "use proportion invariant category", true);
+	
 	int N = 100;
 	List<Tree> trees;
 	Double[][] f;
@@ -46,6 +47,7 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 	Double[] kappa;
 	Double[] shapes;
 	Double[] clockRate;
+	Double[] pInvar;
 
 	@Override
 	public void initAndValidate() {
@@ -98,14 +100,18 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 			// change gammaCategoryCount=1 for generating without gamma rate
 			// categories
 			int gcc = (useGammaInput.get() ? 4 : 1);
-			RealParameter p = new RealParameter("0.0");
+			RealParameter p = new RealParameter(pInvar[i] + "");
 			SiteModel sitemodel = new SiteModel();
 			sitemodel.initByName("gammaCategoryCount", gcc, "substModel", hky, "shape", "" + shapes[i],
 					"proportionInvariant", p);
+			if (usePropInvarInput.get()) {
+				sitemodel.setPropInvariantIsCategory(pInvar[i] > 0);
+			}
+
 			MergeDataWith mergewith = new beast.app.seqgen.MergeDataWith();
 			mergewith.initByName("template", analysisXML, "output", dir + "/analysis-out" + i + ".xml");
 			List<Frequencies> freqList = new ArrayList<>();
-			for (int s = 0; s < 4; s++) {
+			for (int s = 0; s < 4 + (usePropInvarInput.get() ? 1 : 0); s++) {
 				double [] fr = new double[4];
 				for (int r = 0; r < 4; r++) {
 					fr[r] = this.fr[s][r][i];
@@ -154,8 +160,8 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 			}
 		}
 
-		fr = new Double[4][4][];
-		for (int s = 1; s <= 4; s++) {
+		fr = new Double[4 + (usePropInvarInput.get() ? 1 : 0)][4][];
+		for (int s = 1; s <= 4 + (usePropInvarInput.get() ? 1 : 0); s++) {
 			fIndex = getIndex(labels, "freqParameter" + s);
 			fr[s-1][0] = trace.getTrace(fIndex);
 			fr[s-1][1] = trace.getTrace(fIndex + 1);
@@ -172,6 +178,15 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 			shapes = new Double[N];
 			for (int i  =0; i < N; i++) {
 				shapes[i] = 1.0;
+			}
+		}
+		pInvar = null;
+		if (usePropInvarInput.get()) {
+			pInvar = trace.getTrace(getIndex(labels, "proportionInvariant"));
+		} else {
+			pInvar = new Double[N];
+			for (int i  =0; i < N; i++) {
+				pInvar[i] = 0.0;
 			}
 		}
 		

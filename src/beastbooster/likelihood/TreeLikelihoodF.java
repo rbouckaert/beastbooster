@@ -5,6 +5,7 @@ import java.util.List;
 
 import beast.core.Input;
 import beast.core.Input.Validate;
+import beast.core.parameter.RealParameter;
 import beast.evolution.likelihood.TreeLikelihood;
 import beast.evolution.substitutionmodel.Frequencies;
 import beast.evolution.tree.Node;
@@ -28,10 +29,13 @@ public class TreeLikelihoodF extends TreeLikelihood {
 		nrOfMatrices = m_siteModel.getCategoryCount();
 		nrOfPatterns = dataInput.get().getPatternCount();
 
-		if (nrOfMatrices != freqList.size()) {
-			throw new IllegalArgumentException("Number of frequencies (" + freqList.size() + " does not match number of categories in site model (" +nrOfMatrices +")");
+		RealParameter propInvar = (RealParameter)(m_siteModel.getInput("proportionInvariant").get());
+		
+		int nrOfCategories = nrOfMatrices + (propInvar.getValue() > 0 ? 1 : 0);
+		if (nrOfCategories != freqList.size()) {
+			throw new IllegalArgumentException("Number of frequencies (" + freqList.size() + ") does not match number of categories in site model (" +nrOfCategories +")");
 		}
-		freqArray = new double[nrOfMatrices * nrOfStates];
+		freqArray = new double[nrOfCategories * nrOfStates];
 		
 		m_fRootPartials = new double[nrOfMatrices * nrOfStates * nrOfPatterns];
 		outPartials = new double[nrOfMatrices * nrOfStates * nrOfPatterns];

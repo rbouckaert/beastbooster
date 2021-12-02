@@ -162,7 +162,7 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 
 		fr = new Double[4 + (usePropInvarInput.get() ? 1 : 0)][4][];
 		for (int s = 1; s <= 4 + (usePropInvarInput.get() ? 1 : 0); s++) {
-			fIndex = getIndex(labels, "freqParameter" + s);
+			fIndex = getFIndex(labels, s);
 			fr[s-1][0] = trace.getTrace(fIndex);
 			fr[s-1][1] = trace.getTrace(fIndex + 1);
 			fr[s-1][2] = trace.getTrace(fIndex + 2);
@@ -227,6 +227,23 @@ public class CoverageTestXMLGeneratorF extends beast.core.Runnable {
 
 		System.err.println("Done");
 
+	}
+
+	
+	private int getFIndex(List<String> labels, int k) {
+		int i4 = getIndex(labels, "freqParameter4");
+		if (i4 > 0) {
+			return getIndex(labels, "freqParameter" + k);
+		}
+		switch (k) {
+		case 1: return getIndex(labels, "freqParameter1");
+		case 2: 
+		case 3: 
+		case 4: return getIndex(labels, "freqParameter2");
+		case 5: return getIndex(labels, "freqParameter3");
+		}
+		
+		return 0;
 	}
 
 	private int getIndex(List<String> labels, String prefix) {

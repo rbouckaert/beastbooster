@@ -21,8 +21,10 @@
 	<property name="srcBeast2" location="${beast2path}/src" />
 	<property name="beast2classpath" location="${beast2path}/build" />
 	<property name="Add_on_dir" value="${release_dir}/add-on" />
+	<property name="beastboosterdir" value="."/>
+<!--
 	<property name="version" value="0.0.1" />
-
+-->
     <import file="${beast2path}/build.xml" />
 
 	<property name="main_class_BEAST" value="beast.app.BeastMCMC" />
@@ -47,6 +49,14 @@
 	<!-- start -->
 	<target name="initBEASTBooster">
 		<echo message="${ant.project.name}: ${ant.file}" />
+	    <available file="${beastboosterdir}/version.xml" property="versionAvailable"/>
+    	<fail unless="versionAvailable">
+	      ** Required file version.xml does not exist. **
+	    </fail>
+
+    	<!-- Read package name and version from xml file -->
+	    <xmlproperty file="${beastboosterdir}/version.xml" prefix="fromVersionFile" />
+    	<property name="beastboosterversion" value="${fromVersionFile.package(version)}" />
 	</target>
 
 	<target name="cleanBEASTBooster">
@@ -81,7 +91,7 @@
 		<mkdir dir="${buildBEASTBooster}" />
 
 		<!-- Compile the java code from ${srcBEASTBooster} into ${buildBEASTBooster} /bin -->
-		<javac srcdir="${srcBEASTBooster}" destdir="${buildBEASTBooster}" classpathref="classpath"
+		<javac target="1.8" srcdir="${srcBEASTBooster}" destdir="${buildBEASTBooster}" classpathref="classpath"
 		       fork="true"
 		       memoryinitialsize="256m"
 		       memorymaximumsize="256m">
@@ -189,9 +199,11 @@
 		<copy todir="${Add_on_dir}">
 			<fileset file="version.xml"/>
 		</copy>
+		<!--
 		<copy todir="${Add_on_dir}/examples">
 			<fileset dir="examples" />
 		</copy>
+		-->
 		<copy todir="${Add_on_dir}/lib">
 		    <fileset dir="${libBEASTBooster}" includes="mdsj.jar"/>
 			<fileset dir="${distBEASTBooster}" includes="BEASTBooster.addon.jar" />
@@ -205,12 +217,12 @@
 			<fileset file="templates/methods.csv" />
 		</copy>
 -->
-		<jar jarfile="${distBEASTBooster}/BEASTBooster.addon.v${version}.zip">
+		<jar jarfile="${distBEASTBooster}/BEASTBooster.addon.v${beastboosterversion}.zip">
 			<fileset dir="${Add_on_dir}">
 				<include name="**/*" />
 			</fileset>
         </jar>
-		<echo message="Add-on version v${version} release is finished." />
+		<echo message="Add-on version v${beastboosterversion} release is finished." />
 	</target>
 
 </project>

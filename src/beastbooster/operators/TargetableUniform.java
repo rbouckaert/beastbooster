@@ -1,11 +1,11 @@
 package beastbooster.operators;
 
-import beast.core.Description;
-import beast.core.parameter.IntegerParameter;
-import beast.core.parameter.Parameter;
-import beast.core.parameter.RealParameter;
-import beast.evolution.operators.UniformOperator;
-import beast.util.Randomizer;
+import beast.base.core.Description;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.inference.parameter.Parameter;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.inference.operator.UniformOperator;
+import beast.base.util.Randomizer;
 
 @Description("Assign target parameter value to a uniformly selected value in its range.")
 public class TargetableUniform extends UniformOperator implements TargetableOperator {

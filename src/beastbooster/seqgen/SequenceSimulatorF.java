@@ -8,22 +8,23 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import beast.app.seqgen.MergeDataWith;
-import beast.core.BEASTInterface;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.branchratemodel.BranchRateModel;
-import beast.evolution.branchratemodel.StrictClockModel;
-import beast.evolution.sitemodel.SiteModel;
-import beast.evolution.substitutionmodel.Frequencies;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.util.Randomizer;
-import beast.util.XMLParser;
-import beast.util.XMLProducer;
+import beast.base.core.BEASTInterface;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.branchratemodel.BranchRateModel;
+import beast.base.evolution.branchratemodel.StrictClockModel;
+import beast.base.evolution.sitemodel.SiteModel;
+import beast.base.evolution.substitutionmodel.Frequencies;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.util.Randomizer;
+import beast.base.parser.XMLParser;
+import beast.base.parser.XMLProducer;
 import beastbooster.likelihood.TreeLikelihoodF;
+import beastfx.app.seqgen.MergeDataWith;
+import beastfx.app.seqgen.SequenceSimulator;
 
 
 
@@ -32,7 +33,7 @@ import beastbooster.likelihood.TreeLikelihoodF;
  */
 @Description("Performs random sequence generation for a given site model. " +
         "Sequences for the leave nodes in the tree are returned as an alignment.")
-public class SequenceSimulatorF extends beast.app.seqgen.SequenceSimulator {
+public class SequenceSimulatorF extends SequenceSimulator {
 	final public Input<List<Frequencies>> freqListInput = new Input<>("f", "stationary frequencies at root, one for each category", new ArrayList<>(), Validate.REQUIRED);
 
 	/**
@@ -48,7 +49,7 @@ public class SequenceSimulatorF extends beast.app.seqgen.SequenceSimulator {
 	}
 
 	public SequenceSimulatorF(Alignment data, Tree tree, SiteModel sitemodel, StrictClockModel clockmodel,
-			Integer replications, List<Frequencies> freqList, MergeDataWith mergewith) {
+			Integer replications, List<Frequencies> freqList, MergeDataWith  mergewith) {
 		initByName("data", data, "tree", tree, "siteModel", sitemodel, "branchRateModel", clockmodel, 
 				"sequencelength", replications, "f", freqList, "merge", mergewith);
 	}

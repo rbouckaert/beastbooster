@@ -5,16 +5,16 @@ import java.text.DecimalFormat;
 
 import org.apache.commons.math3.util.FastMath;
 
-import beast.core.BEASTInterface;
-import beast.core.Description;
-import beast.core.Distribution;
-import beast.core.Input;
-import beast.core.Runnable;
-import beast.core.State;
-import beast.evolution.operators.TreeOperator;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.util.Randomizer;
+import beast.base.core.BEASTInterface;
+import beast.base.core.Description;
+import beast.base.inference.Distribution;
+import beast.base.core.Input;
+import beast.base.inference.Runnable;
+import beast.base.inference.State;
+import beast.base.evolution.operator.TreeOperator;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.util.Randomizer;
 
 @Description("Node operator that proposes node heights in traversal order")
 public class TargetableMALANodeOperator extends TreeOperator implements TargetableOperator {

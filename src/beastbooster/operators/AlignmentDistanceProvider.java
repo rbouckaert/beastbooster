@@ -1,4 +1,4 @@
-package beast.evolution.operators;
+package beastbooster.operators;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,16 +9,17 @@ import java.util.Set;
 
 import org.apache.commons.math3.util.FastMath;
 
-import beast.core.BEASTObject;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.Input.Validate;
-import beast.core.util.Log;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.distance.Distance;
-import beast.evolution.alignment.distance.JukesCantorDistance;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.TreeInterface;
+import beast.base.core.BEASTObject;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.core.Input.Validate;
+import beast.base.core.Log;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.distance.Distance;
+import beast.base.evolution.distance.JukesCantorDistance;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.TreeInterface;
+import beastlabs.evolution.operators.DistanceProvider;
 import mdsj.ClassicalScaling;
 
 @Description("Provide distance between sequences in allignment after multi-dimensional scaling -- to be used by AttachOperator")

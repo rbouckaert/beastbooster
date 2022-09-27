@@ -3,10 +3,10 @@ package beastbooster.operators;
 import java.util.ArrayList;
 import java.util.List;
 
-import beast.evolution.operators.SubtreeSlide;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.util.Randomizer;
+import beast.base.evolution.operator.SubtreeSlide;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.util.Randomizer;
 
 public class TargetableSubTreeSlide extends SubtreeSlide implements TargetableOperator {
 
@@ -33,7 +33,8 @@ public class TargetableSubTreeSlide extends SubtreeSlide implements TargetableOp
      */
     @Override
     public double proposal(int target) {
-        final Tree tree = treeInput.get(this);
+        final Tree tree = treeInput.get();
+        tree.startEditing(this);
 
         double logq;
 

@@ -3,9 +3,9 @@ package beastbooster.likelihood;
 import java.util.ArrayList;
 import java.util.List;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.parameter.RealParameter;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.parameter.RealParameter;
 
 @Description("Real parameter that takes values averaging over a set of real parameters")
 public class AveragedRealParameter extends RealParameter {

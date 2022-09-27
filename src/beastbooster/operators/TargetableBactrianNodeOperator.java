@@ -1,10 +1,10 @@
 package beastbooster.operators;
 
 
-import beast.core.Description;
-import beast.evolution.operators.BactrianNodeOperator;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
+import beast.base.core.Description;
+import beast.base.evolution.operator.kernel.BactrianNodeOperator;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
 
 @Description("Node operator that proposes node heights in traversal order")
 public class TargetableBactrianNodeOperator extends BactrianNodeOperator implements TargetableOperator {
@@ -32,7 +32,8 @@ public class TargetableBactrianNodeOperator extends BactrianNodeOperator impleme
 	
     @Override
     public double proposal(int target) {
-        Tree tree = treeInput.get(this);
+        Tree tree = treeInput.get();
+        tree.startEditing(this);
 
         // select target node
 

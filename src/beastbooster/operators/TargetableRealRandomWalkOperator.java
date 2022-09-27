@@ -1,8 +1,8 @@
 package beastbooster.operators;
 
-import beast.core.parameter.RealParameter;
-import beast.evolution.operators.RealRandomWalkOperator;
-import beast.util.Randomizer;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.inference.operator.RealRandomWalkOperator;
+import beast.base.util.Randomizer;
 
 public class TargetableRealRandomWalkOperator extends RealRandomWalkOperator implements TargetableOperator {
 
@@ -29,7 +29,8 @@ public class TargetableRealRandomWalkOperator extends RealRandomWalkOperator imp
     @Override
 	public double proposal(int i) {
 
-        RealParameter param = parameterInput.get(this);
+        RealParameter param = parameterInput.get();
+		param.startEditing(this);
 
         double value = param.getValue(i);
         double newValue = value;

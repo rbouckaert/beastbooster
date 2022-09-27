@@ -1,12 +1,12 @@
 package beastbooster.operators;
 
 
-import beast.core.Operator;
-import beast.core.Input.Validate;
-import beast.core.Input;
-import beast.core.Description;
-import beast.core.parameter.IntegerParameter;
-import beast.util.Randomizer;
+import beast.base.inference.Operator;
+import beast.base.core.Input.Validate;
+import beast.base.core.Input;
+import beast.base.core.Description;
+import beast.base.inference.parameter.IntegerParameter;
+import beast.base.util.Randomizer;
 
 
 @Description("A random walk operator that selects a random dimension of the integer parameter and perturbs the value a " +
@@ -46,7 +46,8 @@ public class TargetableIntRandomWalkOperator extends Operator implements Targeta
      */
     @Override
     public double proposal(int target) {
-        final IntegerParameter param = parameterInput.get(this);
+        final IntegerParameter param = parameterInput.get();
+		param.startEditing(this);
 
         final int i = target;
         final int value = param.getValue(i);

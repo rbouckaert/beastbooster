@@ -1,6 +1,6 @@
 package beastbooster.operators;
 
-import beast.core.Description;
+import beast.base.core.Description;
 
 @Description("Operator that can be set up to target a particular node in tree/dimension in parameter")
 public interface TargetableOperator {

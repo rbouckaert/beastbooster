@@ -1,14 +1,14 @@
 package beastbooster.likelihood;
 
-import beast.core.Description;
-import beast.evolution.datatype.DataType;
-import beast.evolution.likelihood.BeerLikelihoodCore;
-import beast.evolution.likelihood.BeerLikelihoodCore4;
-import beast.evolution.likelihood.LikelihoodCore;
-import beast.evolution.likelihood.TreeLikelihood;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.evolution.tree.TreeInterface;
+import beast.base.core.Description;
+import beast.base.evolution.datatype.DataType;
+import beast.base.evolution.likelihood.BeerLikelihoodCore;
+import beast.base.evolution.likelihood.BeerLikelihoodCore4;
+import beast.base.evolution.likelihood.LikelihoodCore;
+import beast.base.evolution.likelihood.TreeLikelihood;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.evolution.tree.TreeInterface;
 
 @Description("TreeLikelihood that can target an internal node as end-point instead of the root."
 		+ "This can be more efficient than its parent class if many updates can be expected "

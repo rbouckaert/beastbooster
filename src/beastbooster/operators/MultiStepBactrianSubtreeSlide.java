@@ -3,12 +3,12 @@ package beastbooster.operators;
 import java.util.ArrayList;
 import java.util.List;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.evolution.operators.BactrianSubtreeSlide;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.util.Randomizer;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.evolution.operator.kernel.BactrianSubtreeSlide;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.util.Randomizer;
 import beastbooster.likelihood.Targetable;
 
 
@@ -17,7 +17,7 @@ import beastbooster.likelihood.Targetable;
         "If it moves up, it can exceed the root and become a new root. " +
         "If it moves down, it may need to make a choice which branch to " +
         "slide down into.")
-public class MultiStepBactrianSubtreeSlide extends beast.evolution.operators.BactrianSubtreeSlide implements MultiStepOperator {
+public class MultiStepBactrianSubtreeSlide extends beast.base.evolution.operator.kernel.BactrianSubtreeSlide implements MultiStepOperator {
 	final public Input<Integer> proposalsPerNodeInput = new Input<>("proposalsPerNode", "number of proposals done for a node before moving on to the next node", 2);
 	final public Input<List<Targetable>> targetsInput = new Input<>("target", "likelihoods affected by the node proposal", new ArrayList<>());
 
@@ -93,7 +93,8 @@ public class MultiStepBactrianSubtreeSlide extends beast.evolution.operators.Bac
      */
     @Override
     public double proposal() {
-        final Tree tree = treeInput.get(this);
+        final Tree tree = treeInput.get();
+        tree.startEditing(this);
 
         double logq;
 

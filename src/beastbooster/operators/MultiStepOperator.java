@@ -1,6 +1,6 @@
 package beastbooster.operators;
 
-import beast.core.Description;
+import beast.base.core.Description;
 
 @Description("Operator that performs multiple steps consecutively in an efficient fashion")
 public interface MultiStepOperator {

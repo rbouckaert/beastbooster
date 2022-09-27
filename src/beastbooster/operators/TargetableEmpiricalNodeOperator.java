@@ -2,41 +2,19 @@ package beastbooster.operators;
 
 
 
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import beast.evolution.alignment.TaxonSet;
-import beast.util.FrequencySet;
 
 import org.apache.commons.math3.util.FastMath;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONStringer;
 
-import beast.core.Description;
-import beast.core.Distribution;
-import beast.core.Function;
-import beast.core.Input;
-import beast.core.State;
-import beast.core.StateNode;
-import beast.core.parameter.RealParameter;
-import beast.evolution.operators.KernelOperator;
-import beast.evolution.operators.TreeOperator;
-import beast.evolution.tree.CladeSet;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.util.Transform.*;
-import beast.util.Randomizer;
-import beast.util.Transform;
-import beast.math.matrixalgebra.*;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.evolution.operator.TreeOperator;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.util.Randomizer;
 
 @Description("Operator that moves internal node height (after transformation to make them "
 		+ "more normally distributed) proposing samples from an empirical distribution that is "

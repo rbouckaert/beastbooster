@@ -9,24 +9,24 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import beast.core.BEASTInterface;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.MCMC;
-import beast.core.Operator;
-import beast.core.OperatorSchedule;
-import beast.core.StateNode;
-import beast.core.parameter.Parameter;
-import beast.core.util.Log;
-import beast.evolution.likelihood.GenericTreeLikelihood;
-import beast.evolution.operators.Exchange;
-import beast.evolution.operators.SubtreeSlide;
-import beast.evolution.operators.TreeOperator;
-import beast.evolution.operators.Uniform;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.evolution.tree.TreeInterface;
-import beast.util.Randomizer;
+import beast.base.core.BEASTInterface;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.MCMC;
+import beast.base.inference.Operator;
+import beast.base.inference.OperatorSchedule;
+import beast.base.inference.StateNode;
+import beast.base.inference.parameter.Parameter;
+import beast.base.core.Log;
+import beast.base.evolution.likelihood.GenericTreeLikelihood;
+import beast.base.evolution.operator.Exchange;
+import beast.base.evolution.operator.SubtreeSlide;
+import beast.base.evolution.operator.TreeOperator;
+import beast.base.evolution.operator.Uniform;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.evolution.tree.TreeInterface;
+import beast.base.util.Randomizer;
 import beastbooster.likelihood.Targetable;
 
 @Description("Operator schedule that recognises MultiStepOperators and selects them for the desired "
@@ -242,7 +242,7 @@ public class MultiStepOperatorScheduleForSingleTree extends OperatorSchedule {
 			Operator bp = new beastbooster.operators.TargetableBactrianNodeOperator();
 			p = initialiseOperator(p, bp);
 		} else if (p.getClass() == SubtreeSlide.class) {
-			Operator bp = new beastbooster.operators.TargetableSubTreeSlide();
+			Operator bp = new TargetableSubTreeSlide();
 			p = initialiseOperator(p, bp);
 		} else if (p.getClass() == Exchange.class && ((Exchange)p).isNarrowInput.get()) {
 			Operator bp = new beastbooster.operators.TargetableExchange();

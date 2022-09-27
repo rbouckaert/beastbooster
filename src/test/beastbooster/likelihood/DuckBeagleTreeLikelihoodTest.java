@@ -1,6 +1,6 @@
 package test.beastbooster.likelihood;
 
-import beast.evolution.likelihood.GenericTreeLikelihood;
+import beast.base.evolution.likelihood.GenericTreeLikelihood;
 import beastbooster.likelihood.DuckBeagleTreeLikelihood;
 
 // all test cases are in beast.evolution.likelihood.DuckTreeLikelihoodTest

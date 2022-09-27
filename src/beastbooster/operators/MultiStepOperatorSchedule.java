@@ -1,8 +1,8 @@
 package beastbooster.operators;
 
-import beast.core.Description;
-import beast.core.Operator;
-import beast.core.OperatorSchedule;
+import beast.base.core.Description;
+import beast.base.inference.Operator;
+import beast.base.inference.OperatorSchedule;
 
 @Description("Operator schedule that recognises MultiStepOperators and selects them for the desired "
 		+ "number of steps consecutively")

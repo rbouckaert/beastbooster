@@ -1,7 +1,7 @@
 package beastbooster.operators;
 
-import beast.core.parameter.RealParameter;
-import beast.evolution.operators.BactrianScaleOperator;
+import beast.base.inference.parameter.RealParameter;
+import beast.base.evolution.operator.kernel.BactrianScaleOperator;
 
 public class TargetableBactrianScaleOperator extends BactrianScaleOperator implements TargetableOperator {
 
@@ -24,7 +24,8 @@ public class TargetableBactrianScaleOperator extends BactrianScaleOperator imple
 
 	@Override
 	public double proposal(int index) {
-		final RealParameter param = parameterInput.get(this);
+		final RealParameter param = parameterInput.get();
+		param.startEditing(this);
 
 		final double oldValue = param.getValue(index);
 

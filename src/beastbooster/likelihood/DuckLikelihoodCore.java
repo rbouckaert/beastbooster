@@ -1,6 +1,6 @@
 package beastbooster.likelihood;
 
-import beast.evolution.likelihood.BeerLikelihoodCore;
+import beast.base.evolution.likelihood.BeerLikelihoodCore;
 
 public class DuckLikelihoodCore extends BeerLikelihoodCore {
 

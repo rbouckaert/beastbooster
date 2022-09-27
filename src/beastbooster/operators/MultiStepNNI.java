@@ -4,12 +4,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import beast.core.Description;
-import beast.core.Input;
-import beast.evolution.operators.TreeOperator;
-import beast.evolution.tree.Node;
-import beast.evolution.tree.Tree;
-import beast.util.Randomizer;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.evolution.operator.TreeOperator;
+import beast.base.evolution.tree.Node;
+import beast.base.evolution.tree.Tree;
+import beast.base.util.Randomizer;
 import beastbooster.likelihood.Targetable;
 
 @Description("Multi step version of NNI operator")
@@ -105,7 +105,8 @@ public class MultiStepNNI extends TreeOperator implements MultiStepOperator {
 	 */
 	@Override
 	public double proposal() {
-        final Tree tree = treeInput.get(this);
+        final Tree tree = treeInput.get();
+        tree.startEditing(this);
         // 0. determine set of candidate nodes
 
         double logq;

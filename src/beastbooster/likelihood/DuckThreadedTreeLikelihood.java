@@ -41,20 +41,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
-import beast.app.BeastMCMC;
-import beast.app.beauti.Beauti;
-import beast.core.BEASTInterface;
-import beast.core.Description;
-import beast.core.Input;
-import beast.core.State;
-import beast.core.util.Log;
-import beast.evolution.alignment.Alignment;
-import beast.evolution.alignment.FilteredAlignment;
-import beast.evolution.likelihood.GenericTreeLikelihood;
-import beast.evolution.likelihood.TreeLikelihood;
-import beast.evolution.likelihood.TreeLikelihood.Scaling;
-import beast.evolution.sitemodel.SiteModel;
-import beast.evolution.substitutionmodel.SubstitutionModel;
+import beastfx.app.beast.BeastMCMC;
+import beastfx.app.beauti.Beauti;
+import beastfx.app.beauti.BeautiTabPane;
+import beast.base.core.BEASTInterface;
+import beast.base.core.Description;
+import beast.base.core.Input;
+import beast.base.inference.State;
+import beast.base.core.Log;
+import beast.base.core.ProgramStatus;
+import beast.base.evolution.alignment.Alignment;
+import beast.base.evolution.alignment.FilteredAlignment;
+import beast.base.evolution.likelihood.GenericTreeLikelihood;
+import beast.base.evolution.likelihood.TreeLikelihood;
+import beast.base.evolution.likelihood.TreeLikelihood.Scaling;
+import beast.base.evolution.sitemodel.SiteModel;
+import beast.base.evolution.substitutionmodel.SubstitutionModel;
 
 
 @Description("Calculates the likelihood of sequence data on a beast.tree given a site and substitution model using " +
@@ -81,7 +83,7 @@ public class DuckThreadedTreeLikelihood extends GenericTreeLikelihood implements
     @Override
     public List<Input<?>> listInputs() {
     	List<Input<?>> list =  super.listInputs();
-    	if (!Beauti.isInBeauti() && System.getProperty("beast.is.junit.testing") == null) {
+    	if (!BeautiTabPane.isInBeauti() && System.getProperty("beast.is.junit.testing") == null) {
     		// do not expose internal likelihoods to BEAUti or junit tests
     		list.add(likelihoodsInput);
     	}
@@ -106,10 +108,10 @@ public class DuckThreadedTreeLikelihood extends GenericTreeLikelihood implements
 	
     @Override
     public void initAndValidate() {
-		threadCount = BeastMCMC.m_nThreads;
+		threadCount = ProgramStatus.m_nThreads;
 
 		if (maxNrOfThreadsInput.get() > 0) {
-			threadCount = Math.min(maxNrOfThreadsInput.get(), BeastMCMC.m_nThreads);
+			threadCount = Math.min(maxNrOfThreadsInput.get(), ProgramStatus.m_nThreads);
 		}
         String instanceCount = System.getProperty("beast.instance.count");
         if (instanceCount != null && instanceCount.length() > 0) {

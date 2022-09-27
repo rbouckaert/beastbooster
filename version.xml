@@ -1,6 +1,38 @@
-<package name='BEASTBooster' version='0.0.1'>
-	<depends on='beast2' atleast='2.6.3'/>
-	<depends on='BEASTLabs' atleast='1.9.5'/>
-	<depends on='FastRelaxedClockLogNormal' atleast='1.1.0'/>
-	<depends on='ORC' atleast='1.0.0'/>
+<package name='BEASTBooster' version='0.0.2'>
+    <depends on='BEAST.base' atleast='2.7.0'/>
+    <depends on='BEAST.app' atleast='2.7.0'/>
+    <depends on='BEASTLabs' atleast='2.0.0'/>
+
+    <service type="beast.base.core.BEASTInterface">
+        <provider classname="beastbooster.likelihood.AveragedRealParameter"/>
+        <provider classname="beastbooster.likelihood.DuckBeagleTreeLikelihood"/>
+        <provider classname="beastbooster.likelihood.DuckThreadedTreeLikelihood"/>
+        <provider classname="beastbooster.likelihood.DuckTreeLikelihood"/>
+        <provider classname="beastbooster.likelihood.TreeLikelihoodF"/>
+        <provider classname="beastbooster.operators.AlignmentDistanceProvider"/>
+        <provider classname="beastbooster.operators.CompoundMultiStepOperator"/>
+        <provider classname="beastbooster.operators.MRCABactrianNodeOperator"/>
+        <provider classname="beastbooster.operators.MultiStepBactrianNodeOperator"/>
+        <provider classname="beastbooster.operators.MultiStepBactrianSubtreeSlide"/>
+        <provider classname="beastbooster.operators.MultiStepExchange"/>
+        <provider classname="beastbooster.operators.MultiStepMultipleChoiceOperator"/>
+        <provider classname="beastbooster.operators.MultiStepNNI"/>
+        <provider classname="beastbooster.operators.MultiStepOperatorSchedule"/>
+        <provider classname="beastbooster.operators.MultiStepOperatorScheduleForSingleTree"/>
+        <provider classname="beastbooster.operators.TargetableBactrianNodeOperator"/>
+        <provider classname="beastbooster.operators.TargetableBactrianScaleOperator"/>
+        <provider classname="beastbooster.operators.TargetableEmpirical2NodeOperator"/>
+        <provider classname="beastbooster.operators.TargetableEmpiricalNodeOperator"/>
+        <provider classname="beastbooster.operators.TargetableExchange"/>
+        <provider classname="beastbooster.operators.TargetableIntRandomWalkOperator"/>
+        <provider classname="beastbooster.operators.TargetableMALANodeOperator"/>
+        <provider classname="beastbooster.operators.TargetableRealRandomWalkOperator"/>
+        <provider classname="beastbooster.operators.TargetableSubTreeSlide"/>
+        <provider classname="beastbooster.operators.TargetableSwapOperator"/>
+        <provider classname="beastbooster.operators.TargetableUniform"/>
+        <provider classname="beastbooster.operators.TargetableUniformOperator"/>
+        <provider classname="beastbooster.seqgen.CoverageTestXMLGeneratorF"/>
+        <provider classname="beastbooster.seqgen.SequenceSimulatorF"/>
+    </service>
+
 </package>

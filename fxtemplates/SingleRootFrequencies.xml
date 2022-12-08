@@ -1,0 +1,101 @@
+<beast version='2.7'
+       namespace='beastfx.app.beauti:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.branchratemodel:beast.base.evolution.speciation:beast.base.evolution.tree.coalescent:beast.base.util:beast.base.math:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood:beast.evolution:beast.base.inference.distribution'>
+
+       
+       
+       
+    <mergewith point='substModelTemplates'>
+
+        <!-- frequency models -->
+        <subtemplate id='RootEstimated' class='beast.base.evolution.substitutionmodel.Frequencies'
+                     mainid='estimatedRootFreqs.s:$(n)' hmc='FrequenciesPrior/index/=Priors/FrequenciesPrior/,
+                     FrequenciesExchanger/index/=Operators/BactrianDeltaExchange/index/'>
+            <![CDATA[
+            <frequencies id='estimatedRootFreqs.s:$(n)' spec='Frequencies'>
+                <frequencies id='freqBaseParameter.s:$(n)' spec='parameter.RealParameter' dimension='4' value='0.25' lower='0' upper='1'/>
+            </frequencies>
+
+            <frequencies id='rootFreqs.s:$(n)' spec='Frequencies'>
+	            <frequencies id='freqRootParameter.s:$(n)' spec='parameter.RealParameter' dimension='4' value='0.25' lower='0' upper='1'/>
+            </frequencies>
+
+	        <operator id="BaseFrequenciesExchanger.s:$(n)" spec="beast.base.evolution.operator.AdaptableOperatorSampler" weight="0.05">
+                <parameter idref="freqBaseParameter.s:$(n)"/>
+    	        <operator idref="AVMNOperator.$(n)"/>
+		        <operator id='FrequenciesExchangerX.s:$(n)' spec='kernel.BactrianDeltaExchangeOperator' delta="0.01" weight="0.1" parameter="@freqBaseParameter.s:$(n)"/>
+	        </operator>
+
+	        <operator id="RootFrequenciesExchanger.s:$(n)" spec="beast.base.evolution.operator.AdaptableOperatorSampler" weight="0.05">
+                <parameter idref="freqRootParameter.s:$(n)"/>
+    	        <operator idref="AVMNOperator.$(n)"/>
+		        <operator id='RootFrequenciesExchangerX.s:$(n)' spec='kernel.BactrianDeltaExchangeOperator' delta="0.01" weight="0.1" parameter="@freqRootParameter.s:$(n)"/>
+	        </operator>
+
+        	<prior id='BaseFrequenciesPrior.s:$(n)' x='@freqBaseParameter.s:$(n)'>
+                 <distr spec="beast.base.inference.distribution.Dirichlet">
+        	        <parameter spec="parameter.RealParameter" dimension="4" estimate="false" name="alpha">4.0 4.0 4.0 4.0</parameter>
+    	        </distr> 
+	        </prior>
+
+	        <prior id='RootFrequenciesPrior.s:$(n)' x='@freqRootParameter.s:$(n)'>
+                <distr spec="beast.base.inference.distribution.Dirichlet">
+                	<parameter spec="parameter.RealParameter" dimension="4" estimate="false" name="alpha">4.0 4.0 4.0 4.0</parameter>
+	            </distr> 
+    	    </prior>
+
+ ]]>
+ 
+			 <!-- connecting base frequencies + associated objects -->
+            <connect srcID='freqBaseParameter.s:$(n)' targetID='state' inputName='stateNode'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and inposterior(freqBaseParameter.s:$(n)) and freqBaseParameter.s:$(n)/estimate=true'/>
+            <connect srcID='freqBaseParameter.s:$(n)' targetID='AVMNSumTransform.$(n)' inputName='f'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and inposterior(freqBaseParameter.s:$(n)) and freqBaseParameter.s:$(n)/estimate=true'/>
+
+            <connect srcID='BaseFrequenciesExchanger.s:$(n)' targetID='mcmc' inputName='operator'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and inposterior(freqBaseParameter.s:$(n)) and freqBaseParameter.s:$(n)/estimate=true'>
+                Exchange values of base frequencies of partition s:$(n)
+            </connect>
+            <connect srcID='freqBaseParameter.s:$(n)' targetID='tracelog' inputName='log'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and inposterior(freqBaseParameter.s:$(n)) and freqBaseParameter.s:$(n)/estimate=true'/>
+            <connect srcID='BaseFrequenciesPrior.s:$(n)' targetID='prior' inputName='distribution'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and inposterior(freqBaseParameter.s:$(n)) and freqBaseParameter.s:$(n)/estimate=true'/>
+
+
+			 <!-- connecting root frequencies + associated objects -->
+            <connect srcID='rootFreqs.s:$(n)' targetID='treeLikelihood.$(n)' inputName='rootFrequencies'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and freqRootParameter.s:$(n)/estimate=true'/>
+            <connect srcID='freqRootParameter.s:$(n)' targetID='state' inputName='stateNode'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and freqRootParameter.s:$(n)/estimate=true'/>
+            <connect srcID='freqRootParameter.s:$(n)' targetID='AVMNSumTransform.$(n)' inputName='f'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and freqRootParameter.s:$(n)/estimate=true'/>
+
+            <connect srcID='RootFrequenciesExchanger.s:$(n)' targetID='mcmc' inputName='operator'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and freqRootParameter.s:$(n)/estimate=true'>
+                Exchange values of root frequencies of partition s:$(n)
+            </connect>
+            <connect srcID='freqRootParameter.s:$(n)' targetID='tracelog' inputName='log'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and freqRootParameter.s:$(n)/estimate=true'/>
+            <connect srcID='RootFrequenciesPrior.s:$(n)' targetID='prior' inputName='distribution'
+                     if='inposterior(estimatedRootFreqs.s:$(n)) and freqRootParameter.s:$(n)/estimate=true'/>
+
+        </subtemplate>
+
+<!--
+        <subtemplate id='Empirical' class='beast.base.evolution.substitutionmodel.Frequencies'
+                     mainid='empiricalFreqs.s:$(n)'>
+            <![CDATA[
+            <frequencies id='empiricalFreqs.s:$(n)' spec='Frequencies' data='@$(n)' estimate='true'/>
+]]>
+        </subtemplate>
+
+        <subtemplate id='AllEqual' class='beast.base.evolution.substitutionmodel.Frequencies' mainid='equalFreqs.s:$(n)'>
+            <![CDATA[
+            <frequencies id='equalFreqs.s:$(n)' spec='Frequencies' data='@$(n)' estimate='false'/>
+]]>
+        </subtemplate>
+-->        
+    </mergewith>
+    
+    
+</beast>
+

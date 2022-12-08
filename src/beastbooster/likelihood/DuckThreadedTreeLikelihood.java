@@ -83,7 +83,7 @@ public class DuckThreadedTreeLikelihood extends GenericTreeLikelihood implements
     @Override
     public List<Input<?>> listInputs() {
     	List<Input<?>> list =  super.listInputs();
-    	if (!BeautiTabPane.isInBeauti() && System.getProperty("beast.is.junit.testing") == null) {
+    	if (!ProgramStatus.name.equals("BEAUti") && System.getProperty("beast.is.junit.testing") == null) {
     		// do not expose internal likelihoods to BEAUti or junit tests
     		list.add(likelihoodsInput);
     	}

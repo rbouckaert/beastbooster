@@ -8,7 +8,6 @@
         <provider classname="beastbooster.likelihood.DuckBeagleTreeLikelihood"/>
         <provider classname="beastbooster.likelihood.DuckThreadedTreeLikelihood"/>
         <provider classname="beastbooster.likelihood.DuckTreeLikelihood"/>
-        <provider classname="beastbooster.likelihood.TreeLikelihoodF"/>
         <provider classname="beastbooster.operators.AlignmentDistanceProvider"/>
         <provider classname="beastbooster.operators.CompoundMultiStepOperator"/>
         <provider classname="beastbooster.operators.MRCABactrianNodeOperator"/>

@@ -30,8 +30,14 @@
         <provider classname="beastbooster.operators.TargetableSwapOperator"/>
         <provider classname="beastbooster.operators.TargetableUniform"/>
         <provider classname="beastbooster.operators.TargetableUniformOperator"/>
-        <provider classname="beastbooster.seqgen.CoverageTestXMLGeneratorF"/>
-        <provider classname="beastbooster.seqgen.SequenceSimulatorF"/>
+        
+        <provider classname="beastbooster.substitutionmodel.RootFreqPrior"/>
+        <provider classname="beastbooster.substitutionmodel.SplitFrequencies"/>
+        <provider classname="beastbooster.operators.FrequenciesSplitter"/>
+        <provider classname="beastbooster.operators.FrequenciesDeltaExchanger"/>
+
+        <provider classname="beastbooster.State"/>
+        
     </service>
 
 </package>

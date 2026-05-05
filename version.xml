@@ -30,6 +30,7 @@
         <provider classname="beastbooster.operators.TargetableSwapOperator"/>
         <provider classname="beastbooster.operators.TargetableUniform"/>
         <provider classname="beastbooster.operators.TargetableUniformOperator"/>
+        <provider classname="beastbooster.operators.BactrianRandomWalkOperator"/>
         
         <provider classname="beastbooster.substitutionmodel.RootFreqPrior"/>
         <provider classname="beastbooster.substitutionmodel.SplitFrequencies"/>

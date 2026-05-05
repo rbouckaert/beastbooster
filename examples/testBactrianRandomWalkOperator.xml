@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beast namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.alignment:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="" version="2.6">
+
+<map name="Normal">beast.base.inference.distribution.Normal</map>
+<map name="prior" >beast.base.inference.distribution.Prior</map>
+
+
+<run id="mcmc" spec="MCMC" chainLength="100000">
+    <state id="state" spec="State" storeEvery="100000">
+        <parameter id="p" spec="parameter.RealParameter" name="stateNode" dimension="$(dim=1)">1.0</parameter>
+    </state>
+
+    <distribution id="posterior" spec="beast.base.inference.CompoundDistribution">
+            <prior id="parameterprior" name="distribution" x="@p">
+                <Normal id="Normal.0" name="distr" mean="0.0" sigma="1.0"/>
+            </prior>
+    </distribution>
+
+    <operator id="operator" spec="beastbooster.operators.BactrianRandomWalkOperator" parameter="@p" target="$(target=0.3)" weight="1.0"
+    	oneDimOnly="false"/>
+<!--
+    <operator id="operator" spec="RealRandomWalkOperator" parameter="@p" weight="1.0" windowSize="0.1"/>
+    	-->
+
+    <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="1" model="@posterior" sanitiseHeaders="true" sort="smart">
+        <log idref="posterior"/>
+        <!-- only log first dimension of parameter -->
+        <log id="param" spec="beastlabs.core.util.Slice" index="0" arg="@p"/>
+        <!--log idref="p"/-->
+    </logger>
+
+    <logger id="screenlog" spec="Logger" logEvery="10000">
+        <log idref="posterior"/>
+        <log idref="p"/>
+    </logger>
+</run>
+
+</beast>
